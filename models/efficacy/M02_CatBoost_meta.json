@@ -1,0 +1,18 @@
+{
+  "signature": "78dc7e9f5b04df1a",
+  "endpoint": "efficacy",
+  "imputation_id": 2,
+  "model": "CatBoost",
+  "best_cv_auc": 0.8671473354231976,
+  "best_params": {
+    "clf__learning_rate": 0.01,
+    "clf__l2_leaf_reg": 2.25,
+    "clf__iterations": 350,
+    "clf__depth": 2
+  },
+  "oof_youden_threshold": 0.6239389880680185,
+  "selection_source": "Training only",
+  "tuning_strategy": "Stage1 RandomizedSearchCV + Stage2 local GridSearchCV",
+  "coarse_best_cv_auc": 0.8622570532915361,
+  "fine_best_cv_auc": 0.8671473354231976
+}

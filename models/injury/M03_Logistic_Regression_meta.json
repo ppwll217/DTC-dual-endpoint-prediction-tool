@@ -1,0 +1,16 @@
+{
+  "signature": "8584f36e335ff22e",
+  "endpoint": "injury",
+  "imputation_id": 3,
+  "model": "Logistic Regression",
+  "best_cv_auc": 0.6737426794002576,
+  "best_params": {
+    "clf__l1_ratio": 0.7,
+    "clf__C": 17.811239451312
+  },
+  "oof_youden_threshold": 0.38153140842520195,
+  "selection_source": "Training only",
+  "tuning_strategy": "Stage1 RandomizedSearchCV + Stage2 local GridSearchCV",
+  "coarse_best_cv_auc": 0.6737426794002576,
+  "fine_best_cv_auc": 0.6737426794002576
+}
