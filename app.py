@@ -860,7 +860,6 @@ app_ui = ui.page_fluid(
                         "": "Select...",
                         "Total": "Total thyroidectomy",
                         "Near-total": "Near-total thyroidectomy",
-                        "Subtotal": "Subtotal thyroidectomy",
                     },
                     selected="",
                 ),
@@ -907,33 +906,24 @@ app_ui = ui.page_fluid(
 
                 ui.input_numeric(
                     "lp_peak_count",
-                    "Left parotid peak count",
+                    "Left parotid peak count (counts)",
                     value=None,
                     min=0,
                 ),
                 ui.input_numeric(
                     "rp_peak_count",
-                    "Right parotid peak count",
+                    "Right parotid peak count (counts)",
                     value=None,
                     min=0,
                 ),
                 ui.input_select(
-                    "lp_vitc_response",
-                    "Left parotid response to vitamin C",
+                    "parotid_vitc_response_count",
+                    "Parotid glands with decreased counts after vitamin C",
                     choices={
                         "": "Select...",
-                        "Decreased": "Decreased",
-                        "Increased": "Increased",
-                    },
-                    selected="",
-                ),
-                ui.input_select(
-                    "rp_vitc_response",
-                    "Right parotid response to vitamin C",
-                    choices={
-                        "": "Select...",
-                        "Decreased": "Decreased",
-                        "Increased": "Increased",
+                        "0": "0 — Neither gland",
+                        "1": "1 — One gland",
+                        "2": "2 — Both glands",
                     },
                     selected="",
                 ),
@@ -1035,8 +1025,7 @@ def server(input, output, session):
             "bmi": input.bmi(),
             "lp_peak_count": input.lp_peak_count(),
             "rp_peak_count": input.rp_peak_count(),
-            "lp_vitc_response": input.lp_vitc_response(),
-            "rp_vitc_response": input.rp_vitc_response(),
+            "parotid_vitc_response_count": input.parotid_vitc_response_count(),
             "rsm_t_half_status": input.rsm_t_half_status(),
             "rsm_t_half": (
                 input.rsm_t_half()
@@ -1075,8 +1064,7 @@ def server(input, output, session):
         ui.update_numeric("bmi", value=None)
         ui.update_numeric("lp_peak_count", value=None)
         ui.update_numeric("rp_peak_count", value=None)
-        ui.update_select("lp_vitc_response", selected="")
-        ui.update_select("rp_vitc_response", selected="")
+        ui.update_select("parotid_vitc_response_count", selected="")
         ui.update_select("rsm_t_half_status", selected="")
         ui.update_numeric("rsm_ef", value=None)
 

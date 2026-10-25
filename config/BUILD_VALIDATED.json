@@ -1,0 +1,86 @@
+{
+  "model_sha256": {
+    "models/efficacy/M01_CatBoost.joblib": "6fa71dbf91535f5361b96aaea2f851f05c0113e133676478f42d820887c8a4eb",
+    "models/efficacy/M02_CatBoost.joblib": "000c61840421487ff9604bd688e07b5c9c82a75ff83f77b50be38f3302167a60",
+    "models/efficacy/M03_CatBoost.joblib": "5f327d2cef029a8cb50655226f3ce4457712bdea34164ca74d9ccde2f0e919aa",
+    "models/efficacy/M04_CatBoost.joblib": "99a03cd7846ebba2ec865499b33227920b6807f7c6238558a840748e5e898f47",
+    "models/efficacy/M05_CatBoost.joblib": "5e8547828dfc2b5ffd81e369939dc0e05dcdb2b163fb47696d312cd45894b087",
+    "models/injury/M01_Logistic_Regression.joblib": "fe16d8826a023f3f91ad8f1cc4908d38c862a610238fb53f9d002975b1913df2",
+    "models/injury/M02_Logistic_Regression.joblib": "40fe27883513f503ede55fbc2564434d2cc6ad76776666c15ee478198bcb451d",
+    "models/injury/M03_Logistic_Regression.joblib": "45d907a37df0d3f9329e591771f3f4709b19fe5886e886315ca11f2aa172b2cb",
+    "models/injury/M04_Logistic_Regression.joblib": "8c15d69e3c8d055debd004c568a0a1a068060c7a3d8253f857aabbccc525f29d",
+    "models/injury/M05_Logistic_Regression.joblib": "be5c04f1da04d1353e6866aaa0380e493c34a7b226b4f54117289b2c0a4db4f8"
+  },
+  "checks": [
+    {
+      "endpoint": "efficacy",
+      "MI": 1,
+      "internal_n": 158,
+      "max_probability_error": 1.1102230246251565e-16,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/efficacy/models/M01/CatBoost.joblib"
+    },
+    {
+      "endpoint": "efficacy",
+      "MI": 2,
+      "internal_n": 158,
+      "max_probability_error": 1.1102230246251565e-16,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/efficacy/models/M02/CatBoost.joblib"
+    },
+    {
+      "endpoint": "efficacy",
+      "MI": 3,
+      "internal_n": 158,
+      "max_probability_error": 1.1102230246251565e-16,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/efficacy/models/M03/CatBoost.joblib"
+    },
+    {
+      "endpoint": "efficacy",
+      "MI": 4,
+      "internal_n": 158,
+      "max_probability_error": 1.1102230246251565e-16,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/efficacy/models/M04/CatBoost.joblib"
+    },
+    {
+      "endpoint": "efficacy",
+      "MI": 5,
+      "internal_n": 158,
+      "max_probability_error": 1.1102230246251565e-16,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/efficacy/models/M05/CatBoost.joblib"
+    },
+    {
+      "endpoint": "injury",
+      "MI": 1,
+      "internal_n": 158,
+      "max_probability_error": 8.326672684688674e-17,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/injury/models/M01/Logistic_Regression.joblib"
+    },
+    {
+      "endpoint": "injury",
+      "MI": 2,
+      "internal_n": 158,
+      "max_probability_error": 8.326672684688674e-17,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/injury/models/M02/Logistic_Regression.joblib"
+    },
+    {
+      "endpoint": "injury",
+      "MI": 3,
+      "internal_n": 158,
+      "max_probability_error": 8.326672684688674e-17,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/injury/models/M03/Logistic_Regression.joblib"
+    },
+    {
+      "endpoint": "injury",
+      "MI": 4,
+      "internal_n": 158,
+      "max_probability_error": 8.326672684688674e-17,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/injury/models/M04/Logistic_Regression.joblib"
+    },
+    {
+      "endpoint": "injury",
+      "MI": 5,
+      "internal_n": 158,
+      "max_probability_error": 8.326672684688674e-17,
+      "source_model": "/Users/ppwl/Desktop/\u6bd5\u4e1a\uff01\u6bd5\u4e1a\uff01/\u7ed3\u679c/12_\u6a21\u578b\u6784\u5efa\u4e0e\u5185\u90e8\u9a8c\u8bc1/injury/models/M05/Logistic_Regression.joblib"
+    }
+  ]
+}

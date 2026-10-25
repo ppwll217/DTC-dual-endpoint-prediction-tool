@@ -19,12 +19,11 @@
       "pre_rai_tg",
       "surgery_to_rai_days",
       "pre_rai_tgab",
-      "surgery_type__2",
-      "surgery_type__3",
       "ata2025_risk",
+      "surgery_type__2",
       "max_ln_metastasis"
     ],
-    "locked_threshold": 0.5767813999849822
+    "locked_threshold": 0.5168249029013937
   },
   "injury": {
     "model": "Logistic Regression",
@@ -42,22 +41,20 @@
     ],
     "locked_threshold": 0.3983056793168745,
     "rsm_t_half_training_uncensored_mean_by_mi": {
-      "1": 5.944897959183674,
+      "1": 5.9804123711340225,
       "2": 6.002083333333334,
-      "3": 5.971134020618557,
-      "4": 5.947959183673469,
-      "5": 5.960824742268041
+      "3": 5.979381443298969,
+      "4": 5.933673469387755,
+      "5": 5.9649484536082475
     }
   },
   "raw_input_encoding": {
     "surgery_type": {
       "Total": 1,
       "Near-total": 2,
-      "Subtotal": 3,
       "reference": "Total",
       "dummy_rule": {
-        "surgery_type__2": "1 only for Near-total, else 0",
-        "surgery_type__3": "1 only for Subtotal, else 0"
+        "surgery_type__2": "1 only for Near-total, else 0"
       }
     },
     "ata2025_risk": {
@@ -67,15 +64,23 @@
       "High": 3
     },
     "vitamin_c_response": {
-      "Decreased": 0,
-      "Increased": 1,
-      "parotid_vitc_response_count": "lp_vitc_response + rp_vitc_response"
+      "Decreased": 1,
+      "Increased": 0,
+      "Unchanged": 0,
+      "parotid_vitc_response_count": "number of parotid glands with decreased counts (0-2)"
     },
     "parotid_peak_mean": "(lp_peak_count + rp_peak_count) / 2",
     "rsm_t_half_two_part": {
       "status_0": "Measurable",
       "status_1": "Prolonged beyond observation window",
       "formula": "(rsm_t_half - MI-specific Training uncensored mean) * (1 - rsm_t_half_censored)"
+    },
+    "web_vitamin_c_input": {
+      "field": "parotid_vitc_response_count",
+      "0": "Neither parotid gland shows decreased counts",
+      "1": "One parotid gland shows decreased counts",
+      "2": "Both parotid glands show decreased counts",
+      "transformation": "Direct integer input; no further recoding"
     }
   },
   "display_units": {
@@ -85,17 +90,16 @@
     "surgery_to_rai_days": "days",
     "pre_rai_tgab": "IU/mL",
     "max_ln_metastasis": "cm",
-    "bmi": "kg/m²",
-    "lp_peak_count": null,
-    "rp_peak_count": null,
+    "bmi": "kg/m\u00b2",
+    "lp_peak_count": "counts",
+    "rp_peak_count": "counts",
     "rsm_t_half": "min",
     "rsm_ef": "%"
   },
   "deployment_qc": {
-    "internal_model_layer_reproduction": "passed",
-    "end_to_end_raw_input_reproduction": "passed",
-    "end_to_end_internal_n": 130,
-    "end_to_end_excluded_mi_varying_input_n": 28,
-    "probability_tolerance": 1e-12
+    "status": "latest_model_layer_reproduction_passed",
+    "raw_web_end_to_end": "not_yet_run",
+    "internal_n": 158,
+    "probability_tolerance": 1e-10
   }
 }

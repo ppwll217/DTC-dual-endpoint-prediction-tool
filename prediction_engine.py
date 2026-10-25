@@ -33,6 +33,9 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = BASE_DIR / "config" / "deployment_config.json"
 
+if not (BASE_DIR / "config" / "BUILD_VALIDATED.json").exists():
+    raise RuntimeError("Run build_deployment.py successfully before launching the app.")
+
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
@@ -52,17 +55,12 @@ RSM_T_HALF_MEAN_BY_MI = {
 SURGERY_TYPE_MAP = {
     "Total": 1,
     "Near-total": 2,
-    "Subtotal": 3,
 }
 ATA2025_MAP = {
     "Low": 0,
     "Low-intermediate": 1,
     "Intermediate-high": 2,
     "High": 3,
-}
-VITC_MAP = {
-    "Decreased": 0,
-    "Increased": 1,
 }
 
 
@@ -108,8 +106,7 @@ def validate_raw_input(raw: Dict[str, Any]) -> Dict[str, Any]:
     bmi
     lp_peak_count
     rp_peak_count
-    lp_vitc_response
-    rp_vitc_response
+    parotid_vitc_response_count
     rsm_t_half_status
     rsm_t_half
     rsm_ef
@@ -129,8 +126,7 @@ def validate_raw_input(raw: Dict[str, Any]) -> Dict[str, Any]:
         "bmi",
         "lp_peak_count",
         "rp_peak_count",
-        "lp_vitc_response",
-        "rp_vitc_response",
+        "parotid_vitc_response_count",
         "rsm_t_half_status",
         "rsm_ef",
     ]
@@ -185,14 +181,13 @@ def validate_raw_input(raw: Dict[str, Any]) -> Dict[str, Any]:
         "Right parotid peak count", raw["rp_peak_count"]
     )
 
-    x["lp_vitc_response"] = _normalize_choice(
-        raw["lp_vitc_response"], VITC_MAP,
-        "Left parotid response to vitamin C"
+    vc_count = _finite_number(
+        "Number of parotid glands with decreased counts after vitamin C",
+        raw["parotid_vitc_response_count"],
     )
-    x["rp_vitc_response"] = _normalize_choice(
-        raw["rp_vitc_response"], VITC_MAP,
-        "Right parotid response to vitamin C"
-    )
+    if vc_count not in (0, 1, 2):
+        raise ValueError("Parotid vitamin-C response count must be 0, 1, or 2.")
+    x["parotid_vitc_response_count"] = int(vc_count)
 
     allowed_status = {
         "Measurable": 0,
@@ -240,7 +235,6 @@ def build_efficacy_row(raw: Dict[str, Any]) -> pd.DataFrame:
         "surgery_to_rai_days": s["surgery_to_rai_days"],
         "pre_rai_tgab": s["pre_rai_tgab"],
         "surgery_type__2": 1.0 if surgery_code == 2 else 0.0,
-        "surgery_type__3": 1.0 if surgery_code == 3 else 0.0,
         "ata2025_risk": float(ATA2025_MAP[s["ata2025_risk"]]),
         "max_ln_metastasis": s["max_ln_metastasis"],
     }
@@ -265,10 +259,7 @@ def build_injury_row_for_mi(
         s["lp_peak_count"] + s["rp_peak_count"]
     ) / 2.0
 
-    parotid_vitc_response_count = (
-        VITC_MAP[s["lp_vitc_response"]]
-        + VITC_MAP[s["rp_vitc_response"]]
-    )
+    parotid_vitc_response_count = s["parotid_vitc_response_count"]
 
     censored = int(
         s["rsm_t_half_status"]
@@ -355,7 +346,11 @@ def _predict_positive_probability(model, X: pd.DataFrame) -> float:
         raise RuntimeError(
             f"Invalid predict_proba shape: {p.shape}; expected (1, 2)."
         )
-    return float(p[0, 1])
+    classes = np.asarray(model.classes_)
+    positive = np.flatnonzero(classes == 1)
+    if len(positive) != 1:
+        raise RuntimeError("Expected exactly one positive class labelled 1.")
+    return float(p[0, positive[0]])
 
 
 def model_integrity_qc() -> Dict[str, Any]:
@@ -378,16 +373,15 @@ def model_integrity_qc() -> Dict[str, Any]:
             if raw_feature_names is not None
             else []
         )
-        passed = (
-            not feature_names
-            or feature_names == EFFICACY_FEATURES
-        )
+        passed = (feature_names == EFFICACY_FEATURES)
         rows.append({
             "endpoint": "efficacy",
             "imputation_id": m,
             "model": "CatBoost",
             "feature_n": len(EFFICACY_FEATURES),
             "feature_names_match": bool(passed),
+            "expected_feature_names": EFFICACY_FEATURES,
+            "actual_feature_names": feature_names,
         })
 
     for m, model in INJURY_MODELS.items():
@@ -399,16 +393,15 @@ def model_integrity_qc() -> Dict[str, Any]:
             if raw_feature_names is not None
             else []
         )
-        passed = (
-            not feature_names
-            or feature_names == INJURY_FEATURES
-        )
+        passed = (feature_names == INJURY_FEATURES)
         rows.append({
             "endpoint": "injury",
             "imputation_id": m,
             "model": "Logistic Regression",
             "feature_n": len(INJURY_FEATURES),
             "feature_names_match": bool(passed),
+            "expected_feature_names": INJURY_FEATURES,
+            "actual_feature_names": feature_names,
         })
 
     overall = all(r["feature_names_match"] for r in rows)
@@ -427,6 +420,8 @@ def predict_patient(raw: Dict[str, Any]) -> Dict[str, Any]:
 
     Returns patient-level mean probabilities across 5 MI models.
     """
+    if not model_integrity_qc()["passed"]:
+        raise RuntimeError("Locked model feature integrity check failed.")
     # Validate once before prediction
     normalized = validate_raw_input(raw)
 
@@ -506,10 +501,7 @@ def predict_patient(raw: Dict[str, Any]) -> Dict[str, Any]:
                     + normalized["rp_peak_count"]
                 ) / 2.0,
             "parotid_vitc_response_count":
-                (
-                    VITC_MAP[normalized["lp_vitc_response"]]
-                    + VITC_MAP[normalized["rp_vitc_response"]]
-                ),
+                normalized["parotid_vitc_response_count"],
             "injury_t_half_by_mi": injury_derived_by_mi,
         },
     }
